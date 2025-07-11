@@ -2,8 +2,10 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/DB.js";
 import UserRoute from "./routes/user.routes.js";
+import blogRoute from "./routes/blog.route.js";
 import fileUpload from "express-fileupload";
 import { v2 as cloudinary } from 'cloudinary';
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 const app = express();
@@ -11,6 +13,7 @@ const app = express();
 // middlerware
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -30,6 +33,8 @@ cloudinary.config({
 
 // defining routes
 app.use("/api/users", UserRoute);
+app.use("/api/blogs", blogRoute);
+
 
 const PORT = process.env.PORT || 3000;
 app.use(express.json());

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import validator from "validator"; // ✅ Correct name used
+import validator from "validator"; 
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -41,7 +41,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     select: false,
-    minlength: 8, // ✅ Fixed typo
+    minlength: 8,
+  },
+  token:{
+    type:String,
   },
   createdAt: {
     type: Date,
@@ -49,4 +52,4 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-export const User = mongoose.model("User", userSchema); // ✅ Capitalized model name
+export const User = mongoose.model("User", userSchema);
