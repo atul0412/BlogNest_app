@@ -6,6 +6,7 @@ import blogRoute from "./routes/blog.route.js";
 import fileUpload from "express-fileupload";
 import { v2 as cloudinary } from 'cloudinary';
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 dotenv.config();
 const app = express();
@@ -20,6 +21,11 @@ app.use(
     tempFileDir: "/tmp",
   })
 );
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+  methods: ["GET","POST", "PUT", "DELETE"],
+}));
 
 // MognoDB connection
 connectDB();
