@@ -23,7 +23,7 @@ export const createBlog = async (req, res) => {
 
     // Extract user info
     const adminName = req.user?.name;
-    const adminPhoto = req.user?.photo;
+    const adminPhoto = req.user?.photo?.url;
     const createdBy = req.user?._id;
 
     // Upload image to Cloudinary
