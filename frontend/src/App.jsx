@@ -7,16 +7,17 @@ import About from "../src/Pages/About";
 import Contact from "../src/Pages/Contact";
 import Login from "../src/Pages/Login";
 import Register from "../src/Pages/Register";
-import Dashboard from "../src/Pages/Dashboard";
+import Dashboard from "../src/pages/Dashboard";
 import Creators from "./pages/Creators";
-import { useAuth } from "./context/AuthProvider";
+
 import { Toaster } from "react-hot-toast";
+import UpdateBlog from "./Dashboard/UpdateBlog";
+import Blogs from "./pages/Blogs";
 
 function App() {
   const location = useLocation();
   const hideNavbarFooter = ["/dashboard", "/login", "/register"].includes(location.pathname);
 
-  const { Blogs } = useAuth();
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -33,6 +34,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/creators" element={<Creators />} />
+          <Route path="/blog/update/:id" element={< UpdateBlog/>} />
         </Routes>
         <Toaster />
       </main>
