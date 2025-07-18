@@ -2,10 +2,10 @@ import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthProvider";
+import { useAuth } from "../context/AuthContext";
 
 function Register() {
-  const { setIsAuthenticated, setProfile } = useAuth();
+   const { setIsAuthenticated, setProfile, setToken } = useAuth();
 
   const navigateTo = useNavigate();
 
@@ -42,18 +42,13 @@ function Register() {
     try {
       const { data } = await axios.post(
         "http://localhost:5000/api/users/register",
-        formData,
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+        formData
       );
       console.log(data);
       localStorage.setItem("jwt", data.token); // storing token in localStorage so that if user refreshed the page it will not redirect again in login
       toast.success(data.message || "User registered successfully");
-      setProfile(data);
+      setToken(data.token); // 🔁 Triggers the fetch
+      setProfile(data.user);
       setIsAuthenticated(true);
       setName("");
       setEmail("");

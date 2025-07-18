@@ -4,13 +4,17 @@ import { useEffect, useState } from "react";
 function Creator() {
   const [admin, setAdmin] = useState([]);
   console.log(admin);
+  const token = localStorage.getItem("jwt");
   useEffect(() => {
     const fetchAdmins = async () => {
       const { data } = await axios.get(
         "http://localhost:5000/api/users/getAdmins",
         {
-          withCredentials: true,
-        }
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
       );
       console.log(data.user);
       setAdmin(Array.isArray(data.user) ? data.user : []);

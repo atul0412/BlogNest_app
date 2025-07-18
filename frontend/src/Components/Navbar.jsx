@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineMenu } from "react-icons/ai";
 import { IoCloseSharp } from "react-icons/io5";
-import { useAuth } from "../context/AuthProvider";
-import axios from "axios";
 import toast from "react-hot-toast";
+import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
   const [show, setShow] = useState(false);
@@ -14,12 +13,8 @@ function Navbar() {
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.get(
-        "http://localhost:5000/api/users/logout",
-        { withCredentials: true }
-      );
       localStorage.removeItem("jwt");
-      toast.success(data.message);
+      toast.success("Logout successfully");
       setIsAuthenticated(false);
       navigateTo("/login");
     } catch (error) {
@@ -28,7 +23,7 @@ function Navbar() {
     }
   };
 
-  console.log("ytrgfhgfhg",profile)
+  console.log("ytrgfhgfhg", profile)
 
   return (
     <>
@@ -55,7 +50,7 @@ function Navbar() {
           </div>
 
           {/* Auth Buttons */}
-          <div className="hidden md:flex space-x-2">
+          <div className=" hidden md:flex space-x-2">
             {isAuthenticated && profile?.role == "admin" && (
               <Link
                 to="/dashboard"
@@ -84,13 +79,19 @@ function Navbar() {
 
         {/* Mobile Menu */}
         {show && (
-          <div className="bg-white">
-            <ul className="flex flex-col h-screen items-center justify-center space-y-3 md:hidden text-xl">
+          <div className="flex-center top-0 left-0 w-full bg-white z-50">
+            <ul className="flex flex-col items-center justify-center space-y-4 py-8 md:hidden text-xl">
+              <Link to="/dashboard" onClick={() => setShow(false)} className="hover:text-blue-500">DASHBOARD</Link>
               <Link to="/" onClick={() => setShow(false)} className="hover:text-blue-500">HOME</Link>
               <Link to="/blogs" onClick={() => setShow(false)} className="hover:text-blue-500">BLOGS</Link>
               <Link to="/creators" onClick={() => setShow(false)} className="hover:text-blue-500">CREATORS</Link>
               <Link to="/about" onClick={() => setShow(false)} className="hover:text-blue-500">ABOUT</Link>
               <Link to="/contact" onClick={() => setShow(false)} className="hover:text-blue-500">CONTACT</Link>
+              {!isAuthenticated ? (
+                <Link to="/login" onClick={() => setShow(false)} className="hover:text-blue-500">LOGIN</Link>
+              ) : (
+                <button onClick={handleLogout} className="hover:text-blue-500">LOGOUT</button>
+              )}
             </ul>
           </div>
         )}

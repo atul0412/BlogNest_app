@@ -1,31 +1,26 @@
 import axios from "axios";
-import React, { createContext, useContext, useEffect, useState } from "react";
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const AuthContext = createContext();
+import React, { useEffect, useState } from "react";
+import { AuthContext } from "./AuthContext"; // 👈 import context from split file
 
 export const AuthProvider = ({ children }) => {
   const [blogs, setBlogs] = useState();
   const [profile, setProfile] = useState();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem("jwt"));
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        // token should be let type variable because its value will change in every login. (in backend also)
-        let token = localStorage.getItem("jwt"); // Retrieve the token directly from the localStorage (Go to login.jsx)
-        console.log(token);
         if (token) {
           const { data } = await axios.get(
             "http://localhost:5000/api/users/my-profile",
             {
-              withCredentials: true,
               headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
               },
             }
           );
-          console.log(data.user);
           setProfile(data.user);
           setIsAuthenticated(true);
         }
@@ -36,20 +31,26 @@ export const AuthProvider = ({ children }) => {
 
     const fetchBlogs = async () => {
       try {
-        const { data } = await axios.get(
-          "http://localhost:5000/api/blogs/all-blogs",
-          { withCredentials: true }
-        );
-        console.log(data);
-        setBlogs(data);
+        if (token) {
+          const { data } = await axios.get(
+            "http://localhost:5000/api/blogs/all-blogs",
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          setBlogs(data);
+        }
       } catch (error) {
         console.log(error);
       }
     };
 
-    fetchBlogs();
     fetchProfile();
-  }, []);
+    fetchBlogs();
+  }, [token]);
 
   return (
     <AuthContext.Provider
@@ -59,12 +60,10 @@ export const AuthProvider = ({ children }) => {
         setProfile,
         isAuthenticated,
         setIsAuthenticated,
+        setToken,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const useAuth = () => useContext(AuthContext);

@@ -120,15 +120,58 @@ export const getMyBlog = async(req, res)=>{
 export const updateBlog = async (req, res) => {
   try {
     const { id } = req.params;
-    if(!mongoose.Types.ObjectId.isValid(id)){
-      return res.status(404).json({ message: "Invalid blog id" });
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid blog ID" });
+    }
+
+    const existingBlog = await Blog.findById(id);
+    if (!existingBlog) {
+      return res.status(404).json({ message: "Blog not found" });
+    }
+
+    const { title, category, about } = req.body;
+
+    let updatedData = { title, category, about };
+
+    // Handle image update
+    if (req.files && req.files.blogImage) {
+      const blogImage = req.files.blogImage;
+
+      const allowedFormats = ["image/jpg", "image/jpeg", "image/png"];
+      if (!allowedFormats.includes(blogImage.mimetype)) {
+        return res.status(400).json({ message: "Invalid image format. Only jpg and png are allowed." });
       }
-      const updateBlog = await Blog.findByIdAndUpdate(id, req.body, { new: true });
-      if (!updateBlog) {
-        return res.status(404).json({ message: "Blog not found" });
-        }
-        return res.status(200).json({ updateBlog });
-        } catch (error) {
-          return res.status(500).json({ message: "Server error", error: error.message });
-          }
-        };
+
+      // Delete old image from Cloudinary
+      if (existingBlog.blogImage?.public_id) {
+        await cloudinary.uploader.destroy(existingBlog.blogImage.public_id);
+      }
+
+      // Upload new image to Cloudinary
+      const cloudinaryResponse = await cloudinary.uploader.upload(blogImage.tempFilePath);
+      if (!cloudinaryResponse || cloudinaryResponse.error) {
+        return res.status(500).json({ message: "Image upload failed" });
+      }
+
+      updatedData.blogImage = {
+        public_id: cloudinaryResponse.public_id,
+        url: cloudinaryResponse.url
+      };
+    }
+
+    const updatedBlog = await Blog.findByIdAndUpdate(id, updatedData, {
+      new: true,
+      runValidators: true,
+    });
+
+    return res.status(200).json({
+      message: "Blog updated successfully",
+      blog: updatedBlog,
+    });
+
+  } catch (error) {
+    return res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+

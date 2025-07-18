@@ -18,7 +18,7 @@ app.use(cookieParser());
 app.use(
   fileUpload({
     useTempFiles: true,
-    tempFileDir: "/tmp",
+    tempFileDir: "/tmp/",
   })
 );
 app.use(cors({

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 function Creators() {
   const [creators, setCreators] = useState([]);
   const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("jwt");
 
   useEffect(() => {
     const fetchCreators = async () => {
@@ -11,8 +12,11 @@ function Creators() {
         const { data } = await axios.get(
           "http://localhost:5000/api/users/getAdmins",
           {
-            withCredentials: true,
-          }
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
         );
 
         // Check if user exists and is an array

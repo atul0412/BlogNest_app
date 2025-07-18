@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuth } from "../Context/AuthProvider";
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CiMenuBurger } from "react-icons/ci";
@@ -18,13 +18,18 @@ function Sidebar({ setComponent }) {
   const gotoHome = () => {
     navigateTo("/");
   };
-
+  const token = localStorage.getItem("jwt");
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
       const { data } = await axios.get(
         "http://localhost:5000/api/users/logout",
-        { withCredentials: true }
+        {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
       );
       toast.success(data.message);
       localStorage.removeItem("jwt");

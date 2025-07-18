@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useAuth } from "../Context/AuthProvider";
+import { useAuth } from "../context/AuthContext";
 import Sidebar from "../Dashboard/SideBar";
 import MyProfile from "../Dashboard/MyProfile";
 import MyBlogs from "../Dashboard/MyBlogs";

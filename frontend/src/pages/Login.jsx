@@ -2,10 +2,10 @@ import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthProvider";
+import { useAuth } from "../context/AuthContext";
 
 function Login() {
-  const { setIsAuthenticated, setProfile } = useAuth();
+  const { setIsAuthenticated, setProfile, setToken } = useAuth();
 
   const navigateTo = useNavigate();
   const [email, setEmail] = useState("");
@@ -18,13 +18,7 @@ function Login() {
     try {
       const { data } = await axios.post(
         "http://localhost:5000/api/users/login",
-        { email, password, role },
-        {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        { email, password, role }
       );
       console.log(data);
       // Store the token in localStorage
@@ -32,7 +26,8 @@ function Login() {
       toast.success(data.message || "User Logined successfully", {
         duration: 3000,
       });
-      setProfile(data);
+      setToken(data.token); // 🔁 Triggers the fetch
+      setProfile(data.user);
       setIsAuthenticated(true);
       setEmail("");
       setPassword("");

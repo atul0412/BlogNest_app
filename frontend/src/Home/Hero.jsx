@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from "../context/AuthProvider";
+import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 
 function Hero() {
@@ -17,7 +17,7 @@ function Hero() {
                         >
                             <div className="group relative">
                                 <img
-                                    src={element.blogImage.url}
+                                    src={element?.blogImage?.url}
                                     alt=""
                                     className="w-full h-56 object-cover"
                                 />

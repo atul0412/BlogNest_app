@@ -1,5 +1,5 @@
 import React from "react";
-import { useAuth } from "../context/AuthProvider";
+import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -39,7 +39,7 @@ function Trending() {
                 <Link to={`/blog/${element._id}`}>
                   <div className="relative">
                     <img
-                      src={element.blogImage.url}
+                      src={element?.blogImage?.url}
                       alt="blog"
                       className="w-full h-56 object-cover rounded-t-lg"
                     />

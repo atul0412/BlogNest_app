@@ -5,13 +5,18 @@ import { Link } from "react-router-dom";
 
 function MyBlogs() {
   const [myBlogs, setMyBlogs] = useState([]);
-
+  const token = localStorage.getItem("jwt");
   useEffect(() => {
     const fetchMyBlogs = async () => {
       try {
         const { data } = await axios.get(
           "http://localhost:5000/api/blogs/my-blog",
-          { withCredentials: true }
+         {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
         );
         console.log("Fetched blogs:", data);
         setMyBlogs(data.myBlog);
@@ -28,7 +33,12 @@ function MyBlogs() {
     try {
       const res = await axios.delete(
         `http://localhost:5000/api/blogs/delete/${id}`,
-        { withCredentials: true }
+       {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            }
       );
       toast.success(res.data.message || "Blog deleted successfully");
       setMyBlogs((prev) => prev.filter((blog) => blog._id !== id));
@@ -49,34 +59,41 @@ function MyBlogs() {
                 className="bg-white shadow-lg rounded-lg overflow-hidden"
                 key={element._id}
               >
-                {element?.blogImage?.url && (
-                  <img
-                    src={element.blogImage.url}
-                    alt="blogImg"
-                    className="w-full h-48 object-cover"
-                  />
-                )}
-                <div className="p-4">
-                  <span className="text-sm text-gray-600">
-                    {element.category}
-                  </span>
-                  <h4 className="text-xl font-semibold my-2">
-                    {element.title}
-                  </h4>
-                  <div className="flex justify-between mt-4">
-                    <Link
-                      to={`/blog/update/${element._id}`}
-                      className="text-blue-500 bg-white rounded-md shadow-lg px-3 py-1 border border-gray-400 hover:underline"
-                    >
-                      UPDATE
-                    </Link>
-                    <button
-                      onClick={() => handleDelete(element._id)}
-                      className="text-red-500 bg-white rounded-md shadow-lg px-3 py-1 border border-gray-400 hover:underline"
-                    >
-                      DELETE
-                    </button>
+                <Link to={`/blog/${element._id}`}>
+                  {element?.blogImage?.url && (
+                    <img
+                      src={element.blogImage.url}
+                      alt="blogImg"
+                      className="w-full h-48 object-cover"
+                    />
+                  )}
+                  <div className="p-4">
+                    <span className="text-sm text-gray-600">
+                      {element.category}
+                    </span>
+                    <h4 className="text-xl font-semibold my-2">
+                      {element.title}
+                    </h4>
                   </div>
+                </Link>
+
+                <div className="flex justify-between px-4 pb-4">
+                  <Link
+                    to={`/blog/update/${element._id}`}
+                    className="text-blue-500 bg-white rounded-md shadow-lg px-3 py-1 border border-gray-400 hover:underline"
+                  >
+                    UPDATE
+                  </Link>
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleDelete(element._id);
+                    }}
+                    className="text-red-500 bg-white rounded-md shadow-lg px-3 py-1 border border-gray-400 hover:underline"
+                  >
+                    DELETE
+                  </button>
                 </div>
               </div>
             ))
