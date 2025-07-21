@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+
 function Login() {
   const { setIsAuthenticated, setProfile, setToken } = useAuth();
 
@@ -16,7 +17,7 @@ function Login() {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/users/login",
+        `${import.meta.env.BASE_URL}/api/users/login`,
         { email, password }
       );
       console.log(data);

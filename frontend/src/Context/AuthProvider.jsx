@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
       try {
         if (token) {
           const { data } = await axios.get(
-            "http://localhost:5000/api/users/my-profile",
+            `${import.meta.env.BASE_URL}/api/users/my-profile`,
             {
               headers: {
                 "Content-Type": "application/json",
@@ -33,8 +33,8 @@ export const AuthProvider = ({ children }) => {
       try {
         if (token) {
           const { data } = await axios.get(
-            "http://localhost:5000/api/blogs/all-blogs",
-            {
+            `${import.meta.env.BASE_URL}/api/blogs/all-blogs`,
+             {
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token}`,

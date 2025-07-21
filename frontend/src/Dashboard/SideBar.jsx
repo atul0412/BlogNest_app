@@ -23,7 +23,7 @@ function Sidebar({ setComponent }) {
     e.preventDefault();
     try {
       const { data } = await axios.get(
-        "http://localhost:5000/api/users/logout",
+        "`${`${import.meta.env.BASE_URL}}/api/users/logout",
         {
               headers: {
                 "Content-Type": "application/json",

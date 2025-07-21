@@ -8,7 +8,7 @@ function Creator() {
   useEffect(() => {
     const fetchAdmins = async () => {
       const { data } = await axios.get(
-        "http://localhost:5000/api/users/getAdmins",
+        "`${`${import.meta.env.BASE_URL}}/api/users/getAdmins",
         {
               headers: {
                 "Content-Type": "application/json",

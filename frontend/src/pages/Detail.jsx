@@ -11,7 +11,7 @@ function Detail() {
     const fetchblogs = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:5000/api/blogs/single-blog/${id}`,
+          `${import.meta.env.BASE_URL}/api/blogs/single-blog/${id}`,
          {
               headers: {
                 "Content-Type": "application/json",

@@ -36,7 +36,7 @@ function CreateBlog() {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/blogs/create",
+        "`${`${import.meta.env.BASE_URL}}/api/blogs/create",
         formData,
         {
           headers: {
