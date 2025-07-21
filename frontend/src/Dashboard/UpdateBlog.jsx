@@ -30,9 +30,9 @@ function UpdateBlog() {
 
   useEffect(() => {
     const fetchBlog = async () => {
-      try {
+      try { 
         const { data } = await axios.get(
-          ``${`${import.meta.env.BASE_URL}}/api/blogs/single-blog/${id}`,
+          `${import.meta.env.BASE_URL}/api/blogs/single-blog/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -68,7 +68,7 @@ function UpdateBlog() {
 
     try {
       const { data } = await axios.put(
-        ``${`${import.meta.env.BASE_URL}}/api/blogs/update-blog/${id}`,
+        `${import.meta.env.BASE_URL}/api/blogs/update-blog/${id}`,
         formData,
         {
           headers: {
