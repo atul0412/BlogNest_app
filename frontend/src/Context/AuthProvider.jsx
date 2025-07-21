@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
       try {
         if (token) {
           const { data } = await axios.get(
-            `${import.meta.env.VITE_BASE_URL}/api/blogs/all-blogs`,
+            `${import.meta.env.BASE_URL}/api/blogs/all-blogs`,
              {
               headers: {
                 "Content-Type": "application/json",

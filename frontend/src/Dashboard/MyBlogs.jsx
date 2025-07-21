@@ -10,7 +10,7 @@ function MyBlogs() {
     const fetchMyBlogs = async () => {
       try {
         const { data } = await axios.get(
-          `${import.meta.env.VITE_BASE_URL}}/api/blogs/my-blog`,
+          `${import.meta.env.BASE_URL}}/api/blogs/my-blog`,
          {
               headers: {
                 "Content-Type": "application/json",
@@ -32,7 +32,7 @@ function MyBlogs() {
   const handleDelete = async (id) => {
     try {
       const res = await axios.delete(
-        `${import.meta.env.VITE_BASE_URL}}/api/blogs/delete/${id}`,
+        `${import.meta.env.BASE_URL}}/api/blogs/delete/${id}`,
        {
               headers: {
                 "Content-Type": "application/json",

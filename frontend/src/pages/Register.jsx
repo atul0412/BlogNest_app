@@ -43,7 +43,7 @@ function Register() {
 
     try {
       const { data } = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}}/api/users/register`,
+        `${import.meta.env.BASE_URL}}/api/users/register`,
         formData
       );
 
