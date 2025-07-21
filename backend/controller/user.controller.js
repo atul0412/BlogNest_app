@@ -82,9 +82,9 @@ export const register = async (req, res) => {
 
 // user login
 export const login = async (req, res) => {
-  const { email, password, role } = req.body;
+  const { email, password} = req.body;
   try {
-    if (!email || !password || !role) {
+    if (!email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
     const user = await User.findOne({ email }).select("+password");
@@ -94,9 +94,6 @@ export const login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!user || !isMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
-    }
-    if (user.role !== role) {
-      return res.status(400).json({ message: "Invalid role" });
     }
     const token = jwt.sign(
       { userId: user._id, role: user.role },

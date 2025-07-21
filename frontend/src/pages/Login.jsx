@@ -10,7 +10,6 @@ function Login() {
   const navigateTo = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,7 +17,7 @@ function Login() {
     try {
       const { data } = await axios.post(
         "http://localhost:5000/api/users/login",
-        { email, password, role }
+        { email, password }
       );
       console.log(data);
       // Store the token in localStorage
@@ -31,7 +30,6 @@ function Login() {
       setIsAuthenticated(true);
       setEmail("");
       setPassword("");
-      setRole("");
       navigateTo("/");
     } catch (error) {
       console.log(error);
@@ -53,15 +51,6 @@ function Login() {
               Blog<span className="text-blue-500">Nest</span>
             </div>
             <h1 className="text-xl font-semibold mb-6">Login</h1>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="w-full p-2 mb-4 border rounded-md"
-            >
-              <option value="">Select Role</option>
-              <option value="user">user</option>
-              <option value="admin">admin</option>
-            </select>
 
             <div className="mb-4">
               <input
